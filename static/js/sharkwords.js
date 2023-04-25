@@ -15,7 +15,7 @@ const WORDS = [
   'chocolate',
 ];
 
-const numWrong = 0;
+let numWrong = 0;
 
 // Loop over the letters in `word` and create divs.
 // The divs should be appended to the section with id="word-container".
@@ -66,6 +66,7 @@ const isLetterInWord = (letter, word) => {
   
 };
 
+
 // This is like if __name__ == '__main__' in Python
 // It will be called when the file is run (because
 // we call the function on line 66)
@@ -80,6 +81,40 @@ const isLetterInWord = (letter, word) => {
 
   generateLetterButtons();
 
-  // in the next lab, you will be adding functionality to handle when
-  // someone clicks on a letter
+  for (const button of document.querySelectorAll('button')) {
+    button.addEventListener('click', () => {
+      isLetterInWord(button.innerHTML, word) ? handleCorrectGuess(button.innerHTML) : handleWrongGuess();
+      disableLetterButton(button);
+    });
+  }
+
+  // add an event handler to handle clicking on the Play Again button
 })();
+
+const handleCorrectGuess = (letter) => {
+  const correctLetterDiv = document.querySelectorAll(`.${letter}`)
+  for (const div of correctLetterDiv) {
+    div.innerHTML = letter
+  }
+    
+}
+
+const handleWrongGuess = () => {
+  numWrong += 1;
+  document.querySelector('img').setAttribute('src',`/static/images/guess${numWrong}.png`);
+  if (numWrong >= 5) {
+    for (const buttonElem of document.querySelectorAll('button')) {
+      console.log('running while loop');
+      disableLetterButton(buttonElem);
+    }
+    document.querySelector('#play-again').style.display = '';
+  }
+  // Replace this with your code
+};
+
+//  Reset game state. Called before restarting the game.
+const resetGame = () => {
+  window.location = '/sharkwords';
+};
+
+
